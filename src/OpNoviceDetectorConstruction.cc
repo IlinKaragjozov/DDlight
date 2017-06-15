@@ -52,9 +52,9 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 {
   fLXe = NULL;
   fExpHall_x = fExpHall_y = fExpHall_z = 10.0*m;
-  fTank_x    = fTank_y    = fTank_z    =  5.0*m;
-  fLXeVol_x    = fLXeVol_y    = fLXeVol_z    =  1.0*m;
-  fBubble_x  = fBubble_y  = fBubble_z  =  0.5*m;
+  fTank_r    = fTank_z    =  5.0*m;
+  fLXeVol_r   = fLXeVol_z    =  1.0*m;
+  fBubble_r  = fBubble_z  =  0.5*m;
 
   //Zero the G4Cache objects to contain logical volumes
   pmtSD.Put(0);
@@ -322,24 +322,24 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 
 // The Water Tank
 //
-  G4Box* waterTank_box = new G4Box("Tank",fTank_x,fTank_y,fTank_z);
-  G4LogicalVolume* waterTank_log = new G4LogicalVolume(waterTank_box,water,"Tank",0,0,0);
+  G4Tubs* waterTank_tube = new G4Tubs("Tank",0,fTank_r,fTank_z,0*deg,360*deg);
+  G4LogicalVolume* waterTank_log = new G4LogicalVolume(waterTank_tube,water,"Tank",0,0,0);
   G4VPhysicalVolume* waterTank_phys = new G4PVPlacement(0,G4ThreeVector(),waterTank_log,"Tank", expHall_log,false,0);
   G4VisAttributes vis_attr_wat;  vis_attr_wat.SetColour(0,0,1);   waterTank_log->SetVisAttributes(vis_attr_wat);
 // The LXe
 //
-  G4Box* LXeVol_box = new G4Box("LXeVol",fLXeVol_x,fLXeVol_y,fLXeVol_z);
-  G4LogicalVolume* LXeVol_log = new G4LogicalVolume(LXeVol_box,fLXe,"LXeVol",0,0,0);
+  G4Tubs* LXeVol_tube = new G4Tubs("LXeVol",0,fLXeVol_r,fLXeVol_z,0*deg,360*deg);
+  G4LogicalVolume* LXeVol_log = new G4LogicalVolume(LXeVol_tube,fLXe,"LXeVol",0,0,0);
   G4VPhysicalVolume* LXeVol_phys = new G4PVPlacement(0,G4ThreeVector(),LXeVol_log,"LXeVol", expHall_log,false,0);
   G4VisAttributes vis_attr_lxe;  vis_attr_lxe.SetColour(1,0,0); vis_attr_lxe.SetForceSolid(true); LXeVol_log->SetVisAttributes(vis_attr_lxe);
 
 
   // The Air Bubble
 //
-//   G4Box* bubbleAir_box = new G4Box("Bubble",fBubble_x,fBubble_y,fBubble_z);
+//   G4Tubs* bubbleAir_tube = new G4Tubs("Bubble",0,fBubble_r,fBubble_z,0*deg,360*deg);
 
 //   G4LogicalVolume* bubbleAir_log
-//     = new G4LogicalVolume(bubbleAir_box,air,"Bubble",0,0,0);
+//     = new G4LogicalVolume(bubbleAir_tube,air,"Bubble",0,0,0);
 
 // //G4VPhysicalVolume* bubbleAir_phys =
 //       new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),bubbleAir_log,"Bubble",

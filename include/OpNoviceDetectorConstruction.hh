@@ -56,16 +56,13 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double fExpHall_y;
     G4double fExpHall_z;
 
-    G4double fTank_x;
-    G4double fTank_y;
+    G4double fTank_r;
     G4double fTank_z;
   
-    G4double fLXeVol_x;
-    G4double fLXeVol_y;
+    G4double fLXeVol_r;
     G4double fLXeVol_z;
 
-    G4double fBubble_x;
-    G4double fBubble_y;
+    G4double fBubble_r;
     G4double fBubble_z;
 
   //Materials & Elements
