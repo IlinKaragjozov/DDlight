@@ -99,5 +99,24 @@ inline void DMXPmtHit::operator delete(void* aHit) {
   DMXPmtHitsAllocator->FreeSingle((DMXPmtHit*) aHit);
 }
 
+// G4int GetCopyNumber; //() const {
+// //return CopyNumber;
+// //}
+
+// G4int GetMotherCopyNumber; //  () const {
+// // return motherCopyNumber;
+// // }
+
+// void SetCopyNumber (G4int copyNo){
+//   CopyNumber=copyNo;
+// }
+
+// void SetMotherCopyNumber (G4int mothercopyNo){
+//   motherCopyNumber=mothercopyNo;
+// }
+
+
+  
+
 #endif
 

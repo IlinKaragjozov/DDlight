@@ -69,12 +69,16 @@ void DMXPmtSD::Initialize(G4HCofThisEvent *)
   pmtCollection = new DMXPmtHitsCollection(SensitiveDetectorName, collectionName[0]);
 
   HitID = -1;
+  //VolID = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////
 G4bool DMXPmtSD::ProcessHits(G4Step *aStep, G4TouchableHistory *)
 {
   std::cout << "[DEBUG] PMT::ProcessHits" << std::endl;
+  G4TouchableHistory* touch = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  //G4VPhysicalVolume* physVol = touch->GetVolume();
+  G4int VolID = touch->GetVolume()->GetCopyNo();
   // make known hit position
   DMXPmtHit *aPmtHit = new DMXPmtHit();
   aPmtHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
@@ -85,8 +89,19 @@ G4bool DMXPmtSD::ProcessHits(G4Step *aStep, G4TouchableHistory *)
 }
 
 G4bool DMXPmtSD::ProcessHits_constStep(const G4Step* aStep,G4TouchableHistory*){
-  std::cout << "[DEBUG] PMT::ProcessHits_constStep" << std::endl;
+  
   // make known hit position
+
+  //G4TouchableHistory* touch = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  //G4VPhysicalVolume* physVol = touch->GetVolume();
+  G4StepPoint* postStep = aStep->GetPostStepPoint();
+  G4TouchableHandle touch = postStep->GetTouchableHandle();
+  G4int CopyNumber = touch->GetCopyNumber();
+  G4int motherCopyNumber = touch->GetCopyNumber(1);
+  //G4int VolID = touch->GetVolume()->GetCopyNo();
+  std::cout << "[DEBUG] PMT::ProcessHits_constStep" << CopyNumber << "Hello world" << motherCopyNumber << std::endl;
+						    
+						    
   DMXPmtHit *aPmtHit = new DMXPmtHit();
   aPmtHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
   aPmtHit->SetTime(aStep->GetPostStepPoint()->GetGlobalTime());
