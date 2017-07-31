@@ -76,27 +76,15 @@ class DDlightDetectorConstruction : public G4VUserDetectorConstruction
 
   //Volumes
   G4LogicalVolume*   pmt_log;
-  G4LogicalVolume*   pmt2_log;
-
   G4VPhysicalVolume* pmt_phys;
-  G4VPhysicalVolume* pmt2_phys;
 
   G4LogicalVolume*   phcath_log;
-  G4LogicalVolume*   phcath2_log;
-
   G4VPhysicalVolume* phcath_phys;
-  G4VPhysicalVolume* phcath2_phys;
 
 
   //  pointer to sensitive detectors
   G4Cache<DMXPmtSD*> pmtSD;
   G4Cache<DMXScintSD*> LXeSD; 
-  private:
-   void PlaceWithDirectMatrix();
-   void PlaceWithInverseMatrix();
-   void PlaceWithAxialRotations();
-   void PlaceWithEulerAngles();
-   void PlaceWithReflections();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

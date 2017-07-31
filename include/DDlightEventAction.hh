@@ -101,7 +101,6 @@ class DDlightEventAction : public G4UserEventAction {
     G4double firstLXeHitTime;
     G4double firstParticleE;
     G4double particleEnergy;
-    G4double ttime;
     G4String particleName;
     G4String firstParticleName;
 

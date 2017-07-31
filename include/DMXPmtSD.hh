@@ -71,8 +71,6 @@ class DMXPmtSD : public G4VSensitiveDetector {
   
      DMXPmtHitsCollection* pmtCollection;
      G4int HitID;
-
-
 };
 
 #endif

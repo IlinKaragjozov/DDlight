@@ -53,7 +53,6 @@ DDlightStackingAction::~DDlightStackingAction()
 G4ClassificationOfNewTrack
 DDlightStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
-
   if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
   { // particle is optical photon
     if(aTrack->GetParentID()>0)
@@ -81,7 +80,6 @@ void DDlightStackingAction::NewStage()
 
 void DDlightStackingAction::PrepareNewEvent()
 {
-  std::cout<<"HElllo somethin is wrong"<<std::endl;
   fScintillationCounter = 0;
   fCerenkovCounter = 0;
 }

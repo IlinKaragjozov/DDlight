@@ -164,8 +164,8 @@ void DDlightEventAction::EndOfEventAction(const G4Event *evt)
 
   G4AnalysisManager *man = G4AnalysisManager::Instance();
 
-  // man->FillNtupleDColumn(4, 0, 42);
-  // man->FillH1(13, 42);
+  man->FillNtupleDColumn(4, 0, 42);
+  man->FillH1(13, 42);
 
   // if(scintillatorCollID<0||pmtCollID<0) return;
   if (pmtCollID < 0)
@@ -188,7 +188,6 @@ void DDlightEventAction::EndOfEventAction(const G4Event *evt)
   particleEnergy = 0.;
   firstLXeHitTime = 0.;
   aveTimePmtHits = 0.;
-  //ttime=0.;
 
   firstParticleName = "";
   particleName = "";
@@ -258,10 +257,7 @@ void DDlightEventAction::EndOfEventAction(const G4Event *evt)
   if (PHC)
   {
     P_hits = PHC->entries();
-    //
-    // G4double ttime=PHC->GetGlobalTime();
-    // man->FillH1(13, ttime);
-    //
+
     // average time of PMT hits
     for (G4int i = 0; i < P_hits; i++)
     {

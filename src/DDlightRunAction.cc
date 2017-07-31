@@ -44,7 +44,6 @@ DDlightRunAction::DDlightRunAction()
       fTimer(0),
       fOutputFile("test.root")
 {
-  
   fTimer = new G4Timer;
 }
 
@@ -59,7 +58,6 @@ DDlightRunAction::~DDlightRunAction()
 
 void DDlightRunAction::BeginOfRunAction(const G4Run *aRun)
 {
-  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   fTimer->Start();
 
@@ -68,7 +66,6 @@ void DDlightRunAction::BeginOfRunAction(const G4Run *aRun)
 
 void DDlightRunAction::Book()
 {
-  
   // Get/create analysis manager
   G4AnalysisManager *man = G4AnalysisManager::Instance();
 
@@ -116,9 +113,9 @@ void DDlightRunAction::Book()
 
   // test ntuple
   //id=4
-  // man->CreateNtuple("testing", "Just for testing");
-  // man->CreateNtupleDColumn("test1");
-  // man->FinishNtuple();
+  man->CreateNtuple("testing", "Just for testing");
+  man->CreateNtupleDColumn("test1");
+  man->FinishNtuple();
 
   // Creating 1-dimensional histograms
   man->CreateH1("h1", "Source Energy /keV", 1000, 0., 10000.);
@@ -133,8 +130,7 @@ void DDlightRunAction::Book()
   man->CreateH1("h10", "Electron Ener Deposit/keV", 1000, 0., 1000.);
   man->CreateH1("h11", "Positron Ener Deposit/keV", 1000, 0., 1000.);
   man->CreateH1("h12", "Other Ener Deposit/keV", 1000, 0., 1000.);
-  // man->CreateH1("test", "Testing", 100, 0., 100.);
-  // man->CreateH1("h13", "Time", 100, 0., 100);
+  man->CreateH1("test", "Testing", 100, 0., 100.);
 
   //Creating 2-dimensional histograms
   man->CreateH2("hh1", "PMT Hit Pattern",

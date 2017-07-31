@@ -44,13 +44,6 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4RotationMatrix.hh"
-#include "G4Transform3D.hh"
-#include "G4ReflectionFactory.hh"
-#include "G4GeometryManager.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4NistManager.hh"
-#include "G4LogicalVolumeStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,7 +51,7 @@ DDlightDetectorConstruction::DDlightDetectorConstruction()
     : G4VUserDetectorConstruction(), fLXe_mt(NULL)
 {
   fLXe = NULL;
-  fExpHall_x = fExpHall_y = fExpHall_z = 15.0 * m;
+  fExpHall_x = fExpHall_y = fExpHall_z = 10.0 * m;
   fTank_x = fTank_y = fTank_z = 5.0 * m;
   fLXeVol_x = fLXeVol_y = fLXeVol_z = 1.0 * m;
   fBubble_x = fBubble_y = fBubble_z = 0.5 * m;
@@ -327,7 +320,7 @@ G4VPhysicalVolume *DDlightDetectorConstruction::Construct()
   //
   G4Box *waterTank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
   G4LogicalVolume *waterTank_log = new G4LogicalVolume(waterTank_box, water, "Tank", 0, 0, 0);
-  G4VPhysicalVolume *waterTank_phys = new G4PVPlacement(0, G4ThreeVector(), waterTank_log, "Tank", expHall_log, false, 1);
+  G4VPhysicalVolume *waterTank_phys = new G4PVPlacement(0, G4ThreeVector(), waterTank_log, "Tank", expHall_log, false, 0);
   G4VisAttributes vis_attr_wat;
   vis_attr_wat.SetColour(0, 0, 1);
   waterTank_log->SetVisAttributes(vis_attr_wat);
@@ -335,7 +328,7 @@ G4VPhysicalVolume *DDlightDetectorConstruction::Construct()
   //
   G4Box *LXeVol_box = new G4Box("LXeVol", fLXeVol_x, fLXeVol_y, fLXeVol_z);
   G4LogicalVolume *LXeVol_log = new G4LogicalVolume(LXeVol_box, fLXe, "LXeVol", 0, 0, 0);
-  G4VPhysicalVolume *LXeVol_phys = new G4PVPlacement(0, G4ThreeVector(), LXeVol_log, "LXeVol", expHall_log, false, 2);
+  G4VPhysicalVolume *LXeVol_phys = new G4PVPlacement(0, G4ThreeVector(), LXeVol_log, "LXeVol", expHall_log, false, 0);
   G4VisAttributes vis_attr_lxe;
   vis_attr_lxe.SetColour(1, 0, 0);
   vis_attr_lxe.SetForceSolid(true);
@@ -399,33 +392,24 @@ G4VPhysicalVolume *DDlightDetectorConstruction::Construct()
   G4double pmtVPosition = -5 * m; //-0.5*(LXeTubeHeight+pmtHeight)+pmtVOffset;
 
   G4Sphere *pmt_window = new G4Sphere("pmt_sphere", 0. * cm, 2. * pmtRadius, 0. * deg, 360. * deg, 0. * deg, 30.0 * deg);
-  //G4Sphere *pmt2_window = new G4Sphere("pmt2_sphere", 0. * cm, 2. * pmtRadius, 0.0 * deg, 360. * deg, 0.0 * deg, 30.0 * deg);//second PMT
   G4Tubs *pmt_tube = new G4Tubs("pmt_tube", 0. * cm, pmtRadius, 0.5 * pmtHeight, 0. * deg, 360. * deg);
 
   G4UnionSolid *pmt_sol = new G4UnionSolid("pmt_sol", pmt_tube, pmt_window, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, 0.5 * pmtHeight - 2. * pmtRadius * std::cos(30.0 * deg))));
-  // G4UnionSolid *pmt2_sol = new G4UnionSolid("pmt2_sol", pmt_tube, pmt2_window, G4Transform3D(G4RotationMatrix(), G4ThreeVector(0, 0, 0.5 * pmtHeight - 2. * pmtRadius * std::cos(30.0 * deg))));
 
   pmt_log = new G4LogicalVolume(pmt_sol, quartz, "pmt_log", 0, 0, 0);
-  pmt_phys = new G4PVPlacement(0, G4ThreeVector(0. * cm, 0. * cm, pmtVPosition), pmt_log, "pmt_phys", expHall_log, false, 3);
-
-  // pmt2_log = new G4LogicalVolume(pmt2_sol, quartz, "pmt_log", 0, 0, 0);
-  // pmt2_phys = new G4PVPlacement(0, G4ThreeVector(0. * cm, 0. * cm, -pmtVPosition), pmt2_log, "pmt2_phys", expHall_log, false, 3);
-
+  pmt_phys = new G4PVPlacement(0, G4ThreeVector(0. * cm, 0. * cm, pmtVPosition), "pmt_phys", pmt_log, LXeVol_phys, false, 0);
 
   G4OpticalSurface *pmt_opsurf = new G4OpticalSurface("pmt_opsurf", unified, polished, dielectric_dielectric);
   G4LogicalBorderSurface *pmt_surf = new G4LogicalBorderSurface("pmt_surf", LXeVol_phys, pmt_phys, pmt_opsurf);
-  //G4LogicalBorderSurface *pmt2_surf = new G4LogicalBorderSurface("pmt_surf", LXeVol_phys, pmt2_phys, pmt_opsurf);//second PMT
   G4VisAttributes vis_attr;
   vis_attr.SetColour(1.0, 0.0, 1.0);
   vis_attr.SetForceSolid(true);
   pmt_log->SetVisAttributes(vis_attr);
-  //pmt2_log->SetVisAttributes(vis_attr);//second PMT
 
   //now need to set PMT surface atrributes and make sure they are registered
   G4double phcathVOffset = 0.5 * pmtHeight - 2. * pmtRadius * std::cos(30.0 * deg);
   G4double phcathVPosition = phcathVOffset;
   G4Sphere *phcath_sol = new G4Sphere("phcath_sphere", 2. * pmtRadius - 1.6 * mm, 2. * pmtRadius - 1.59 * mm, 0. * deg, 360. * deg, 0. * deg, 27.0 * deg);
-  //G4Sphere *phcath2_sol = new G4Sphere("phcath_sphere", 2. * pmtRadius - 1.6 * mm, 2. * pmtRadius - 1.59 * mm, 0. * deg, 360. * deg, 0. * deg, 27.0 * deg);//second PMT
 
   //BP todo: at some point move all materials into sepearet file. Lot of clutter
   // aluminium
@@ -446,16 +430,11 @@ G4VPhysicalVolume *DDlightDetectorConstruction::Construct()
 
   //bp now continue with building photo cathode
   phcath_log = new G4LogicalVolume(phcath_sol, cathmetalAl, "phcath_log");
-  phcath_phys = new G4PVPlacement(0, G4ThreeVector(0., 0., phcathVPosition), "phcath_phys", phcath_log, pmt_phys, false, 4);
-
-
-  // phcath2_log = new G4LogicalVolume(phcath_sol, cathmetalAl, "phcath2_log");
-  // phcath2_phys = new G4PVPlacement(0, G4ThreeVector(0., 0., -phcathVPosition), "phcath2_phys", phcath2_log, pmt2_phys, false, 4);
+  phcath_phys = new G4PVPlacement(0, G4ThreeVector(0., 0., phcathVPosition), "phcath_phys", phcath_log, pmt_phys, false, 0);
 
   //now its surface
   G4OpticalSurface *phcath_opsurf = new G4OpticalSurface("phcath_opsurf", unified, polished, dielectric_dielectric);
   new G4LogicalBorderSurface("phcath_surf", pmt_phys, phcath_phys, phcath_opsurf);
-  //new G4LogicalBorderSurface("phcath_surf", pmt2_phys, phcath2_phys, phcath_opsurf);//second PMT
 
   G4double phcath_PP[2] = {6.00 * eV, 7.50 * eV};
   // G4double phcath_REFL[2] = { 0.0, 0.0};
@@ -478,26 +457,12 @@ G4VPhysicalVolume *DDlightDetectorConstruction::Construct()
 
   G4VisAttributes phcath_vat;
   phcath_vat.SetColour(0.0, 1.0, 1.0);
-  phcath_vat.SetForceWireframe(true);
+  phcath_vat.SetForceSolid(true);
   phcath_vat.SetVisibility(true);
   phcath_log->SetVisAttributes(vis_attr);
-  //phcath2_log->SetVisAttributes(vis_attr);//second PMT
   new G4LogicalSkinSurface("photocath_surf", phcath_log, photocath_opsurf);
-  //new G4LogicalSkinSurface("photocath_surf", phcath2_log, photocath_opsurf);//second PMT
 
-  // bp
-
-  G4Transform3D translatez = HepGeom::Translate3D(0, 0, -pmtVPosition);
-  G4Transform3D reflect3D = HepGeom::ReflectZ3D();
-  // G4Transform3D trans_surf = HepGeom::Translate3D(0, 0, -phcathVPosition*2);
-  
-  G4ReflectionFactory::Instance()
-     ->Place(translatez * reflect3D, "opPMT", pmt_log, expHall_log, false, 5);
-
-
-
-
-
+  //bp
 
   //works, toy
   //   G4Box* pmt_box = new G4Box("pmtvol",fLXeVol_x,-fLXeVol_y/2,fLXeVol_z/2);

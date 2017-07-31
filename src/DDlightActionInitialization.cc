@@ -44,9 +44,7 @@
 
 DDlightActionInitialization::DDlightActionInitialization()
  : G4VUserActionInitialization()
-{
-  
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,7 +56,6 @@ DDlightActionInitialization::~DDlightActionInitialization()
 void DDlightActionInitialization::BuildForMaster() const
 {
   SetUserAction(new DDlightRunAction());
-  std::cout<<"BUg in action"<<std::endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +64,6 @@ void DDlightActionInitialization::Build() const
 {
   SetUserAction(new DDlightPrimaryGeneratorAction());
   SetUserAction(new DDlightRunAction());
-  
   //  SetUserAction(new DMXEventAction()); //BP, breaks the code
   SetUserAction(new DDlightEventAction()); //BP, breaks the code
   SetUserAction(new DDlightSteppingAction());
